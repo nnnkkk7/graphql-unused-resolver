@@ -9,5 +9,4 @@ linters:
     - godot
     - gosec
     - misspell
-    - revive
     - funcorder
