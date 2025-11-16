@@ -36,8 +36,8 @@ because the corresponding fields have been removed from your GraphQL schema.`,
 	cmd.Flags().StringVar(&config.SchemaPath, "schema", "", "Path to GraphQL schema file (required)")
 	cmd.Flags().StringVar(&config.ResolverDir, "resolvers", "", "Path to resolver directory (required)")
 
-	cmd.MarkFlagRequired("schema")
-	cmd.MarkFlagRequired("resolvers")
+	_ = cmd.MarkFlagRequired("schema")
+	_ = cmd.MarkFlagRequired("resolvers")
 
 	return cmd
 }

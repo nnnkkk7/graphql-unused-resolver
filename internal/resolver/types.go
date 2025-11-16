@@ -2,7 +2,7 @@ package resolver
 
 import "go/ast"
 
-// Method represents a resolver method found in the code
+// Method represents a resolver method found in the code.
 type Method struct {
 	// ReceiverType is the resolver type (e.g., "*queryResolver")
 	ReceiverType string

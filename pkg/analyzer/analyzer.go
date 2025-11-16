@@ -7,30 +7,30 @@ import (
 	"github.com/nnnkkk7/graphql-unused-resolver/internal/schema"
 )
 
-// Config contains analyzer configuration
+// Config contains analyzer configuration.
 type Config struct {
 	SchemaPath  string
 	ResolverDir string
 }
 
-// Result contains analysis results
+// Result contains analysis results.
 type Result struct {
 	UnusedResolvers []resolver.Method
 	TotalResolvers  int
 	TotalFields     int
 }
 
-// Analyzer is the main analyzer
+// Analyzer is the main analyzer.
 type Analyzer struct {
 	config Config
 }
 
-// New creates a new Analyzer
+// New creates a new Analyzer.
 func New(config Config) *Analyzer {
 	return &Analyzer{config: config}
 }
 
-// Analyze performs the complete analysis
+// Analyze performs the complete analysis.
 func (a *Analyzer) Analyze() (*Result, error) {
 	// 1. Parse GraphQL schema
 	schemaParser := schema.NewParser()
@@ -59,7 +59,7 @@ func (a *Analyzer) Analyze() (*Result, error) {
 	return result, nil
 }
 
-// detectUnused finds resolvers that are not defined in the schema
+// detectUnused finds resolvers that are not defined in the schema.
 func (a *Analyzer) detectUnused(fields []schema.Field, resolvers []resolver.Method) []resolver.Method {
 	// Create a map of schema fields for fast lookup
 	schemaMap := make(map[string]bool)

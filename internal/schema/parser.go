@@ -2,37 +2,33 @@ package schema
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
-// Parser parses GraphQL schema files
+// Parser parses GraphQL schema files.
 type Parser struct {
 	schema *ast.Schema
 }
 
-// NewParser creates a new schema parser
+// NewParser creates a new schema parser.
 func NewParser() *Parser {
 	return &Parser{}
 }
 
-// Parse parses a GraphQL schema file and returns fields
+// Parse parses GraphQL schema from a file or directory and returns fields.
+// If schemaPath is a file, it parses that single file.
+// If schemaPath is a directory, it parses all .graphql files in the directory.
 func (p *Parser) Parse(schemaPath string) ([]Field, error) {
-	// Read schema file
-	content, err := os.ReadFile(schemaPath)
+	// Load schema sources (file or directory)
+	sources, err := loadSources(schemaPath)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read schema: %w", err)
+		return nil, fmt.Errorf("failed to load schema: %w", err)
 	}
 
-	// Parse with gqlparser
-	source := &ast.Source{
-		Name:  schemaPath,
-		Input: string(content),
-	}
-
-	schema, gqlErr := gqlparser.LoadSchema(source)
+	// Parse with gqlparser (supports multiple sources)
+	schema, gqlErr := gqlparser.LoadSchema(sources...)
 	if gqlErr != nil {
 		return nil, fmt.Errorf("failed to parse schema: %w", gqlErr)
 	}
@@ -43,7 +39,7 @@ func (p *Parser) Parse(schemaPath string) ([]Field, error) {
 	return p.extractFields()
 }
 
-// extractFields extracts all fields from Query and Mutation types
+// extractFields extracts all fields from Query and Mutation types.
 func (p *Parser) extractFields() ([]Field, error) {
 	var fields []Field
 
@@ -60,7 +56,7 @@ func (p *Parser) extractFields() ([]Field, error) {
 	return fields, nil
 }
 
-// extractTypeFields extracts fields from a specific type
+// extractTypeFields extracts fields from a specific type.
 func (p *Parser) extractTypeFields(typeName string, typeDef *ast.Definition) []Field {
 	var fields []Field
 

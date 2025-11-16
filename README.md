@@ -31,7 +31,11 @@ go install github.com/s20590/graphql-unused-resolver/cmd/graphql-unused-resolver
 ### Basic Usage
 
 ```bash
+# Single schema file
 graphql-unused-resolver --schema schema.graphql --resolvers ./graph/resolvers
+
+# Schema directory (multiple .graphql files)
+graphql-unused-resolver --schema ./schemas --resolvers ./graph/resolvers
 ```
 
 ### Example Output
@@ -69,10 +73,24 @@ Unused Resolvers:    3
 
 ## How It Works
 
-1. **Schema Parsing**: Reads your GraphQL schema and extracts all Query and Mutation fields
+1. **Schema Parsing**: Reads your GraphQL schema (single file or directory with multiple .graphql files) and extracts all Query and Mutation fields
 2. **Resolver Analysis**: Scans your Go code for gqlgen-style resolver methods (`*queryResolver`, `*mutationResolver`)
 3. **Comparison**: Compares schema fields with implemented resolvers
 4. **Detection**: Identifies resolvers that are implemented but not defined in the schema
+
+### Multi-File Schema Support
+
+You can now organize your GraphQL schema into multiple files:
+
+```
+schemas/
+├── query.graphql      # Query type definitions
+├── mutation.graphql   # Mutation type definitions
+└── types.graphql      # Common types
+
+# The tool will automatically merge all .graphql files
+graphql-unused-resolver --schema ./schemas --resolvers ./resolvers
+```
 
 ## Supported Patterns
 
@@ -115,6 +133,7 @@ This is the **minimal MVP** version with core functionality:
 
 ### ✅ Implemented
 - GraphQL schema parsing (Query/Mutation types only)
+- **Single file or directory schema support** (automatically merges multiple .graphql files)
 - gqlgen resolver detection
 - Unused resolver detection
 - Simple text output

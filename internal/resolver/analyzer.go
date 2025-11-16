@@ -10,19 +10,19 @@ import (
 	"strings"
 )
 
-// Analyzer analyzes resolver code
+// Analyzer analyzes resolver code.
 type Analyzer struct {
 	fset *token.FileSet
 }
 
-// NewAnalyzer creates a new resolver analyzer
+// NewAnalyzer creates a new resolver analyzer.
 func NewAnalyzer() *Analyzer {
 	return &Analyzer{
 		fset: token.NewFileSet(),
 	}
 }
 
-// Analyze analyzes a resolver directory and returns all resolver methods
+// Analyze analyzes a resolver directory and returns all resolver methods.
 func (a *Analyzer) Analyze(dir string) ([]Method, error) {
 	var methods []Method
 	var errors []error
@@ -65,7 +65,7 @@ func (a *Analyzer) Analyze(dir string) ([]Method, error) {
 	return methods, nil
 }
 
-// analyzeFile analyzes a single Go file
+// analyzeFile analyzes a single Go file.
 func (a *Analyzer) analyzeFile(path string) ([]Method, []error) {
 	var methods []Method
 	var errors []error
@@ -103,7 +103,7 @@ func (a *Analyzer) analyzeFile(path string) ([]Method, []error) {
 	return methods, errors
 }
 
-// extractResolverMethod extracts resolver method information from a function declaration
+// extractResolverMethod extracts resolver method information from a function declaration.
 func (a *Analyzer) extractResolverMethod(funcDecl *ast.FuncDecl, filePath string) (*Method, error) {
 	// Get receiver type
 	receiverType := a.getReceiverType(funcDecl.Recv)
@@ -139,7 +139,7 @@ func (a *Analyzer) extractResolverMethod(funcDecl *ast.FuncDecl, filePath string
 	}, nil
 }
 
-// getReceiverType extracts the receiver type from a method
+// getReceiverType extracts the receiver type from a method.
 func (a *Analyzer) getReceiverType(recv *ast.FieldList) string {
 	if recv == nil || len(recv.List) == 0 {
 		return ""
@@ -161,11 +161,11 @@ func (a *Analyzer) getReceiverType(recv *ast.FieldList) string {
 	return ""
 }
 
-// inferGraphQLType infers GraphQL type from receiver type
+// inferGraphQLType infers GraphQL type from receiver type.
 // Examples:
 // *queryResolver -> Query
 // *mutationResolver -> Mutation
-// *userResolver -> User
+// *userResolver -> User.
 func (a *Analyzer) inferGraphQLType(receiverType string) string {
 	// Remove pointer prefix
 	typeName := strings.TrimPrefix(receiverType, "*")
@@ -179,7 +179,7 @@ func (a *Analyzer) inferGraphQLType(receiverType string) string {
 
 // Helper functions
 
-// lowerFirst converts the first character to lowercase
+// lowerFirst converts the first character to lowercase.
 func lowerFirst(s string) string {
 	if s == "" {
 		return ""
@@ -187,7 +187,7 @@ func lowerFirst(s string) string {
 	return strings.ToLower(s[:1]) + s[1:]
 }
 
-// upperFirst converts the first character to uppercase
+// upperFirst converts the first character to uppercase.
 func upperFirst(s string) string {
 	if s == "" {
 		return ""
